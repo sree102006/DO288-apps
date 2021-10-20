@@ -1,0 +1,135 @@
+  
+Question:1
+  743  oc login -u developer -p developer
+  744  podman login quay.io
+  745  oc create secret generic regsec --from-file .dockerconfigjson=/run/user/1002/containers/auth.json --type=kubernetes.io/dockerconfigjson
+  746  oc secrets link default regsec --for=pull
+  747  oc new-app --name=photose --docker-image=quay.io/ex288-reguser/hello-openshift
+  748  oc create configmap tickopen --from-literal response="Stop soda can't stop"
+  749  oc set env --from cm/tickopen deployment/photose
+  750  oc get service
+  751  oc expose service photose 
+  752  oc get route -n openshift-image-registry
+
+Question:2
+  754  TOKEN=$(oc whoami -t)
+  755  podman login -u developer -p ${TOKEN} default-route-openshift-image-registry.apps-crc.testing --tls-verify=false
+  758  podman pull default-route-openshift-image-registry.apps-crc.testing/xerter/repure --tls-verify=false
+
+Question:3 
+  759  oc project openin
+  776  oc set build-hook bc/ziner --post-commit --command -- sh mail.sh
+  777  oc start-build ziner -F
+  778  oc expose service ziner
+  779  oc get route
+
+Question:4
+  872  podman search httpd-24
+  873  podman login quay.io
+  874  env | grep XDG_RUNTIME_DIR
+  875  cat /run/user/1002/containers/auth.json 
+  876  oc new-project gocin
+  877  oc get is
+  878  oc create secret generic regsec --from-file .dockerconfigjson=${XDG_RUNTIME_DIR}/containers/auth.json --type=kubernetes.io/dockerconfigjson
+  879  oc get serviceaccounts 
+  880  oc secrets link builder regsec
+  881  oc describe serviceaccounts builder 
+  882  oc describe serviceaccounts default -n zenpe
+  883  oc get is
+  884  oc import-image httpd --from=quay.io/ex288-reguser/httpd-24-rhel7 --confirm 
+  885  oc get is
+  886  mkdir git-repos
+  887  cd git-repos/
+  888  git clone https://github.com/ex288-user/ex288-s2i.git
+  889  ls
+  890  cd ex288-s2i/
+  891  git status
+  892  ls
+  893  ls -al
+  894  tree .s2i/
+  895  vim .s2i/bin/assemble 
+  896  ls
+  897  vim index.html 
+  898  git status
+  899  git add .
+  900  git commit -m "Customized Source"
+  901  git push
+  902  git status
+  903  oc project
+  904  cd
+  905  oc project
+  906  oc get pods
+  907  oc get is
+  908  oc new-app --name=proxy --as-deployment-config httpd~https://github.com/ex288-user/ex288-s2i.git
+  909  oc logs -f buildconfig/proxy
+  910  oc logs proxy-1-deploy
+  911  oc get service
+  912  oc expose service proxy 
+  913  oc get route
+
+Question: 5
+  915  oc new-project jonson
+  916  oc get istag -n openshift | grep nodejs
+  917  oc new-app --name=paste --as-deployment-config nodejs:10~https://github.com/ex288-user/ex288-nodejs-app.git --build-env npm_config_registry=http://nexus-common.apps.ap45.prod.nextcle.com/repository/nodejs
+  918  oc logs -f buildconfig/paste
+  919  cd git-repos/
+  920  git clone  https://github.com/ex288-user/ex288-nodejs-app.git
+  921  ls
+  922  cd ex288-nodejs-app/
+  923  ls
+  924  python3 -m json.tool package.json
+  925  vim package.json 
+  926  python3 -m json.tool package.json
+  927  git status
+  928  git add package.json 
+  929  git commit -m "Fixed Errors"
+  930  git push
+  931  git status
+  932  oc get build
+  933  oc start-build paste -F
+  934  oc get service
+  935  oc expose service paste
+  936  oc get routes
+
+Question: 6
+  939  oc new-project japan
+  940  cd Templates/
+  941  ls
+  942  cd ..
+  943  ls
+  944  mkdir mytemplate
+  945  cd mytemplate/
+  946  wget http://content/template/ex288-template.yaml
+  947  ls
+  948  oc project
+  949  oc get template
+  950  vim ex288-template.yaml 
+  951  grep ' kind: ' ex288-template.yaml 
+  952  vim ex288-template.yaml 
+  953  oc get istage -n openshift | grep mysql
+  954  oc get istag -n openshift | grep mysql
+  955  oc get istag -n openshift | grep php
+  956  vim ex288-template.yaml 
+  957  oc process -f ex288-template.yaml --parameters 
+  958  vim ex288-template.yaml 
+  959  oc create -f ex288-template.yaml 
+  960  oc get template
+  961  oc new-app ex288-php-mysql
+  962  oc new-app ex288-php-mysql -p APPLICATION_DOMAIN=php-app-japan.apps-crc.testing
+  963  oc logs -f buildconfig/cakephp-mysql-example
+  964  oc delete all -l template=php-app  
+  965  oc get all
+  966  oc delete secret cakephp-mysql-example
+  967  oc new-app ex288-php-mysql -p APPLICATION_DOMAIN=php-app-japan.apps-crc.testing
+  968  history
+  969  vim ex288-template.yaml 
+  970  grep ' :kind ' ex288-template.yaml 
+  971  grep ' kind: ' ex288-template.yaml 
+  972  vim ex288-template.yaml 
+
+Question: 7
+  975  oc project openin 
+  976  oc get pods
+  977  oc get dc
+  978  oc set probe --liveness --open-tcp=8080 --initial-delay-seconds=3 --timeout-seconds=10 dc/ziner
+  979  oc describe dc ziner | grep Liveness
